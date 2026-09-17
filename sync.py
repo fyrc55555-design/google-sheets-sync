@@ -1,25 +1,22 @@
 import os
 import csv
+import json
 import gspread
 from google.oauth2.service_account import Credentials
 
 SPREADSHEET_ID = "1MVubq3_rUpj_KVD4QUyxZ8cv2YrlxzugrP8kOltjto4"
 
 SCOPES = [
-    "https://www.googleapis.com/auth/spreadsheets.readonly",
+    "https://www.googleapis.com/auth/spreadsheets.readonly"
 ]
 
+service_account_info = json.loads(
+    os.environ["GOOGLE_CREDENTIALS_JSON"]
+)
+
 credentials = Credentials.from_service_account_info(
-    {
-        "type": "service_account",
-        "project_id": os.environ["GOOGLE_PROJECT_ID"],
-        "private_key_id": os.environ["GOOGLE_PRIVATE_KEY_ID"],
-        "private_key": os.environ["GOOGLE_PRIVATE_KEY"].replace("\\n", "\n"),
-        "client_email": os.environ["GOOGLE_CLIENT_EMAIL"],
-        "client_id": os.environ["GOOGLE_CLIENT_ID"],
-        "token_uri": "https://oauth2.googleapis.com/token",
-    },
-    scopes=SCOPES,
+    service_account_info,
+    scopes=SCOPES
 )
 
 client = gspread.authorize(credentials)
